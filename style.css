@@ -13,7 +13,20 @@ button {
 }
 
 span {
+  width: 120px;
   cursor: pointer;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+span::before {
+  content:"\f56b";
+  display: inline-block;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  margin-right: 18px;
 }
 
 button:hover {
@@ -22,7 +35,30 @@ button:hover {
   font-weight: bolder;
 }
 
+.plus-button,
+.minus-button {
+  cursor: pointer;
+}
+
+.plus-button::before {
+  content: "\2b";
+  display: inline-block;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  margin-left: 9px;
+}
+
+.minus-button::before {
+  content: "\f068";
+  display: inline-block;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  margin-left: 9px;
+}
+
 li {
+  display: flex;
+  align-items: center;
   padding: 10px 5px 10px 5px;
 }
 
