@@ -28,12 +28,12 @@ export default function PostItem(title, id) {
     const target = e.target;
     if (target.closest("span") === $title) {
       pushRouter(`/documents/${$title.className}`);
-    } else if (target.closest("button") === $addButton) {
-      const createdPost = await postData($addButton.className);
+    } else if (target.closest("div") === $addButton) {
+      const createdPost = await postData($addButton.querySelector("button").className);
       pushRouter(`/documents/${createdPost.id}`);
-    } else if (target.closest("button") === $removeButton) {
+    } else if (target.closest("div") === $removeButton) {
       alert("문서가 정상적으로 삭제되었습니다.");
-      await deleteData($removeButton.className).then((res) => {
+      await deleteData($removeButton.querySelector("button").className).then((res) => {
         if (res.parent) pushRouter(`/documents/${res.parent.id}`);
         else {
           pushRouter(`/`);
@@ -48,7 +48,10 @@ export default function PostItem(title, id) {
 
 export const makeButton = (text, className) => {
   const $button = document.createElement("button");
-  $button.textContent = text;
+  const $buttonDiv = document.createElement("div");
+  $buttonDiv.appendChild($button);
   $button.className = className;
-  return $button;
+  if (text === "+") $buttonDiv.className = "plus-button";
+  else $buttonDiv.className = "minus-button";
+  return $buttonDiv;
 };

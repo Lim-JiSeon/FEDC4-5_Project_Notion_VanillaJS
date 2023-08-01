@@ -29,7 +29,7 @@ export const postData = async (id = null) => {
   return request("/documents", {
     method: "POST",
     body: JSON.stringify({
-      title: "제목 없음",
+      title: "새로운 문서",
       parent: id,
     }),
   });
