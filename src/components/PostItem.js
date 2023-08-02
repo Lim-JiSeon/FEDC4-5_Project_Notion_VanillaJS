@@ -22,24 +22,28 @@ export default function PostItem(title, id) {
   const $postSubItemBox = document.createElement("ul");
 
   $postItemBox.appendChild($li);
-  $postItemBox.append($postSubItemBox);
+  $postItemBox.appendChild($postSubItemBox);
 
   $li.addEventListener("click", async (e) => {
     const target = e.target;
     if (target.closest("span") === $title) {
       pushRouter(`/documents/${$title.className}`);
     } else if (target.closest("div") === $addButton) {
-      const createdPost = await postData($addButton.querySelector("button").className);
+      const createdPost = await postData(
+        $addButton.querySelector("button").className
+      );
       pushRouter(`/documents/${createdPost.id}`);
     } else if (target.closest("div") === $removeButton) {
       alert("문서가 정상적으로 삭제되었습니다.");
-      await deleteData($removeButton.querySelector("button").className).then((res) => {
-        if (res.parent) pushRouter(`/documents/${res.parent.id}`);
-        else {
-          pushRouter(`/`);
-          location.reload();
+      await deleteData($removeButton.querySelector("button").className).then(
+        (res) => {
+          if (res.parent) pushRouter(`/documents/${res.parent.id}`);
+          else {
+            pushRouter(`/`);
+            location.reload();
+          }
         }
-      });
+      );
     }
   });
 

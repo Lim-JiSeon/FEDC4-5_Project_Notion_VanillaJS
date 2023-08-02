@@ -1,6 +1,7 @@
 import PostEditPage from "./PostEditPage.js";
 import PostSidebar from "./PostSidebar.js";
 import { initRouter } from "../utils/router.js";
+import Breadcrumb from "./Breadcrumb.js";
 
 export default function App({ $target }) {
   const $postSideBarContainer = document.createElement("div");
@@ -25,6 +26,11 @@ export default function App({ $target }) {
     },
   });
 
+  const breadcrumb = new Breadcrumb({
+    $target: $postEditContainer,
+    postId: "new",
+  });
+
   this.route = () => {
     const { pathname } = window.location;
 
@@ -33,6 +39,7 @@ export default function App({ $target }) {
     if (pathname !== "/" && pathname.indexOf("/") === 0) {
       const [, , postId] = pathname.split("/");
       postEditPage.setState({ postId });
+      breadcrumb.setState({ postId });
     }
   };
 
