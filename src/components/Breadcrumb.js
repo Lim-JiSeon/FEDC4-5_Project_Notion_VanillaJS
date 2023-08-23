@@ -1,46 +1,56 @@
-import { getData } from "../utils/api.js";
+import { pushRouter } from "../utils/router.js";
 
-export default function Breadcrumb({ $target, postId }) {
+export default function Breadcrumb({ $target, initialState }) {
   const $breadcrumb = document.createElement("div");
   $breadcrumb.className = "breadcrumb";
-  const breadcrumb = {};
-
-  this.state = postId;
-
   $target.appendChild($breadcrumb);
+  const breadcrumb = {};
+  const path = [];
+
+  this.state = initialState;
 
   this.setState = async (nextState) => {
     this.state = nextState;
-    const documents = await getData("/documents");
-    this.makeBreadcrumb(false, documents);
-    console.log(breadcrumb);
+    this.makeBreadcrumb(this.state);
     this.render();
   };
 
   this.render = () => {
-    const targetDocument = breadcrumb[this.state];
-    targetDocument.forEach((item) => {
-      $documentLink = document.createElement("div");
-      $documentLink.textContent = item[0];
-      $breadcrumb.appendChild($documentLink);
+    $breadcrumb.innerHTML = "";
+    const postId = getPostId();
+    const targetPath = breadcrumb[postId];
+
+    targetPath.forEach((item) => {
+      const $breadcrumbItem = document.createElement("div");
+      $breadcrumbItem.className = item[1];
+      $breadcrumbItem.textContent = `${item[0]}`;
+      $breadcrumb.appendChild($breadcrumbItem);
+
+      $breadcrumbItem.addEventListener("click", () => {
+        pushRouter(`/documents/${$breadcrumbItem.className}`);
+      });
     });
   };
 
-  this.makeBreadcrumb = async (targetItem, data) => {
+  this.makeBreadcrumb = (data) => {
     data.forEach(({ title, documents, id }) => {
-      targetItem
-        ? targetItem.push([title, id])
-        : (breadcrumb[id] = [[title, id]]);
-
       if (documents.length > 0) {
-        this.makeBreadcrumb(breadcrumb[id], documents);
+        if (!breadcrumb[id]) breadcrumb[id] = [...path, [title, id]];
+        path.push([title, id]);
+        this.makeBreadcrumb(documents);
       } else {
-        this.makeBreadcrumb(false, documents);
+        breadcrumb[id] = [...path, [title, id]];
       }
     });
+    path.pop();
   };
-
-  $breadcrumb.addEventListener("keyup", (e) => {
-    const { target } = e;
-  });
 }
+
+const getPostId = () => {
+  const { pathname } = window.location;
+
+  if (pathname !== "/" && pathname.indexOf("/") === 0) {
+    const [, , postId] = pathname.split("/");
+    return postId;
+  }
+};

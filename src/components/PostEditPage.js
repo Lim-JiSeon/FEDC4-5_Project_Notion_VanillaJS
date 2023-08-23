@@ -1,8 +1,16 @@
 import { getData, putData } from "../utils/api.js";
 import Editor from "./Editor.js";
 import { pushRouter } from "../utils/router.js";
+import Breadcrumb from "./Breadcrumb.js";
 
 export default function PostEditPage({ $target, initialState }) {
+  const $editorContainer = document.createElement("div");
+  const $breadcrumbContainer = document.createElement("div");
+  $target.appendChild($breadcrumbContainer);
+  $target.appendChild($editorContainer);
+  $editorContainer.className = "editor-container";
+  $breadcrumbContainer.className = "breadcrumb-container";
+
   const INTERVAL_SAVE_TIME = 2000;
 
   this.state = initialState;
@@ -10,7 +18,7 @@ export default function PostEditPage({ $target, initialState }) {
   let timer = null;
 
   const editor = new Editor({
-    $target,
+    $target: $editorContainer,
     initialState: {
       title: "",
       content: "",
@@ -31,6 +39,11 @@ export default function PostEditPage({ $target, initialState }) {
     },
   });
 
+  const breadcrumb = new Breadcrumb({
+    $target: $breadcrumbContainer,
+    initialState: [],
+  });
+
   this.setState = async (nextState) => {
     if (this.state.postId !== nextState.postId) {
       this.state = nextState;
@@ -46,6 +59,9 @@ export default function PostEditPage({ $target, initialState }) {
         content: "",
       }
     );
+
+    const documents = await getData("/documents");
+    breadcrumb.setState(documents);
   };
 
   const getDocument = async () => {

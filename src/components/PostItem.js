@@ -1,4 +1,4 @@
-import { deleteData, getData, postData } from "../utils/api.js";
+import { deleteData, postData } from "../utils/api.js";
 import { pushRouter } from "../utils/router.js";
 
 export default function PostItem(title, id) {

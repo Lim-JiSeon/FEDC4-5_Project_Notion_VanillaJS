@@ -21,7 +21,7 @@ export default function PostSidebar({ $target }) {
     this.render();
   };
 
-  this.render = async () => {
+  this.render = () => {
     $createButton.textContent = "문서 생성하기";
     $title.textContent = "Notion Project";
     $target.appendChild($title);
