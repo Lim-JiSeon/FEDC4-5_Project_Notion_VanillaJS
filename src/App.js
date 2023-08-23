@@ -1,6 +1,6 @@
-import PostEditPage from "./PostEditPage.js";
-import PostSidebar from "./PostSidebar.js";
-import { initRouter } from "../utils/router.js";
+import PostEditPage from "./components/PostEditPage.js";
+import PostSidebar from "./components/PostSidebar.js";
+import { initRouter } from "./utils/router.js";
 
 export default function App({ $target }) {
   const $postSideBarContainer = document.createElement("div");
